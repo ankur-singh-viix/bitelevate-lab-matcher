@@ -4,6 +4,15 @@ A small web app that helps students choose a [BitElevate](https://www.cynbit.in/
 
 Built as a prototype for the Cynbit Technologies Full Stack Developer Intern assessment. It is an independent project and **not an official Cynbit product**.
 
+## Live Demo
+
+**[https://bitelevate-lab-matcher.vercel.app/](https://bitelevate-lab-matcher.vercel.app/)**
+
+> This is a placeholder URL. It will work only once the project is deployed to Vercel under this name.
+
+## Links
+
+- GitHub repository: [github.com/ankur-singh-viix/bitelevate-lab-matcher](https://github.com/ankur-singh-viix/bitelevate-lab-matcher)
 - Technical report: [docs/technical-report.md](docs/technical-report.md)
 
 ## Business problem
