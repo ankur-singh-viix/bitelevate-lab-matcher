@@ -35,6 +35,32 @@ npm run dev
 
 Open http://localhost:3000. Other scripts: `npm run build`, `npm run start`, `npm run lint`.
 
+## How scoring works
+
+The recommendation engine ([src/lib/scoring.ts](src/lib/scoring.ts)) is **deterministic and rule-based**: the same five answers always produce the same result. There is no AI, randomness or server involved. Each answer adds (or removes) points for specific labs, and the lab with the highest total is the primary recommendation. The second highest is the runner-up.
+
+| Answer | Rule |
+|---|---|
+| Interest | **+5** to the matching lab: web → fullstack, apis → python-backend, ai → ai-vector, interfaces → frontend-ops, testing → qa-automation, design → uiux-design |
+| Skill: beginner | fullstack +2, frontend-ops +2, qa-automation +2, **ai-vector −2** |
+| Skill: comfortable | ai-vector +2, python-backend +2 |
+| Skill: some projects | no points |
+| Goal: placement | fullstack +1, python-backend +1 |
+| Goal: portfolio | frontend-ops +1, uiux-design +1 |
+| Goal: credit | qa-automation +1, fullstack +1 |
+| Goal: learn | no points |
+| Year: final or graduate | fullstack +1, python-backend +1 |
+| Year: 1st/2nd or 3rd | no points |
+| Time | no points. `under1h` only adds a warning that the program expects about 1.5–2 hours a day |
+
+**Tie-breaking priority** (used only when scores are equal): fullstack, python-backend, frontend-ops, qa-automation, ai-vector, uiux-design.
+
+A beginner who picks AI still gets +5 for interest and −2 for skill, so AI can remain the top result. The rules are not adjusted to prevent this.
+
+Shareable results use URL query parameters (`year`, `skill`, `interest`, `goal`, `time`). Every value is validated against the allowed option IDs; anything missing or invalid is rejected ([src/lib/resultUrl.ts](src/lib/resultUrl.ts)).
+
+Run the unit tests with `npm test`.
+
 ## Project structure
 
 ```
