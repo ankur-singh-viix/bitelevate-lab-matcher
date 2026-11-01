@@ -1,26 +1,193 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ---- Theme tokens. The active theme is set by data-theme on <html>. ---- */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #08090d;
+  --surface: #0e1017;
+  --line: #1f222c;
+  --fg: #f4f4f7;
+  --muted: #d0d2da;
+  --subtle: #a3a6b3;
+  --faint: #8a8d9a;
+  --edge: rgb(255 255 255 / 0.15);
+  --edge-strong: rgb(255 255 255 / 0.32);
+  --wash: rgb(255 255 255 / 0.05);
+  --wash-strong: rgb(255 255 255 / 0.1);
+  --brand: #a78bfa;
+  --brand-hover: #c4b5fd;
+  --on-brand: #08090d;
+  --accent-violet: #c4b5fd;
+  --accent-teal: #5eead4;
+  --warn: #fcd34d;
+  --shade: rgb(0 0 0 / 0.5);
+  --orb-violet: rgb(139 92 246 / 0.24);
+  --orb-teal: rgb(45 212 191 / 0.13);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ink: #faf8f4;
+  --surface: #ffffff;
+  --line: #e6e1d6;
+  --fg: #15141b;
+  --muted: #3d3b49;
+  --subtle: #5a5866;
+  --faint: #6b6977;
+  --edge: rgb(21 20 27 / 0.18);
+  --edge-strong: rgb(21 20 27 / 0.36);
+  --wash: rgb(21 20 27 / 0.04);
+  --wash-strong: rgb(21 20 27 / 0.08);
+  --brand: #6d28d9;
+  --brand-hover: #5b21b6;
+  --on-brand: #ffffff;
+  --accent-violet: #6d28d9;
+  --accent-teal: #0f766e;
+  --warn: #92400e;
+  --shade: rgb(60 40 110 / 0.16);
+  --orb-violet: rgb(139 92 246 / 0.2);
+  --orb-teal: rgb(20 184 166 / 0.16);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-faint: var(--faint);
+  --color-edge: var(--edge);
+  --color-edge-strong: var(--edge-strong);
+  --color-wash: var(--wash);
+  --color-wash-strong: var(--wash-strong);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-on-brand: var(--on-brand);
+  --color-accent-violet: var(--accent-violet);
+  --color-accent-teal: var(--accent-teal);
+  --color-warn: var(--warn);
+  --color-shade: var(--shade);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-bricolage), var(--font-geist-sans);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--ink);
+  color: var(--fg);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Brief, class-scoped colour transition used only while toggling the theme. */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition-property: background-color, color, border-color, fill, stroke !important;
+  transition-duration: 300ms !important;
+  transition-timing-function: ease !important;
+}
+
+/* ---- Ambient background: blurred orbs that drift slowly behind content ---- */
+.aurora {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(48px);
+  will-change: transform;
+}
+.aurora::before {
+  top: -22rem;
+  left: -12rem;
+  width: 46rem;
+  height: 46rem;
+  background: radial-gradient(closest-side, var(--orb-violet), transparent);
+  animation: drift-a 28s ease-in-out infinite alternate;
+}
+.aurora::after {
+  top: 2rem;
+  right: -20rem;
+  width: 42rem;
+  height: 42rem;
+  background: radial-gradient(closest-side, var(--orb-teal), transparent);
+  animation: drift-b 36s ease-in-out infinite alternate;
+}
+
+@keyframes drift-a {
+  to {
+    transform: translate(7rem, 5rem) scale(1.08);
+  }
+}
+@keyframes drift-b {
+  to {
+    transform: translate(-6rem, 6rem) scale(1.1);
+  }
+}
+
+/* ---- Entrances ---- */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes slide-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes slide-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-slide-from-right {
+  animation: slide-from-right 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-slide-from-left {
+  animation: slide-from-left 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora::before,
+  .aurora::after,
+  .animate-fade-up,
+  .animate-slide-from-right,
+  .animate-slide-from-left {
+    animation: none;
+  }
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition-duration: 0ms !important;
+  }
 }
