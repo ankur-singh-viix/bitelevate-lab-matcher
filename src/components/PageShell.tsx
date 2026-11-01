@@ -1,11 +1,12 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { ENROLLMENT } from "../lib/config";
 import { Brand } from "./Brand";
 import { MobileMenu, type NavItem } from "./MobileMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import { focusRing } from "./ui";
 
-const OFFICIAL = "https://www.cynbit.in/bitelevate";
+const OFFICIAL = ENROLLMENT.baseUrl;
 
 const NAV: readonly NavItem[] = [
   { label: "How it works", href: "/#how" },
